@@ -7,7 +7,6 @@ export default function AdminPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ english, cebuano, audioUrl: "", videoUrl: "" }),
     });
-
     const data = await res.json().catch(() => ({}));
     if (res.ok) {
       alert("Entry added!");
