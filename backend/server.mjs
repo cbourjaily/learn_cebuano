@@ -20,7 +20,6 @@ await mongoose.connect(process.env.MONGO_URI)
     console.error("Mongo error:", err);
     process.exit(1);
   });
-  console.log("Connected to MongoDB");
 
 /* -----------------------------
    Schema (English ↔ Cebuano)
