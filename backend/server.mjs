@@ -4,7 +4,9 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
@@ -12,8 +14,13 @@ const PORT = process.env.PORT || 3000;
 /* -----------------------------
    Mongo Connection
 ----------------------------- */
-await mongoose.connect(process.env.MONGO_URI);
-console.log("Connected to MongoDB");
+await mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => {
+    console.error("Mongo error:", err);
+    process.exit(1);
+  });
+  console.log("Connected to MongoDB");
 
 /* -----------------------------
    Schema (English ↔ Cebuano)
