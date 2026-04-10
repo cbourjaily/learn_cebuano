@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "cors": "...",
+    "dotenv": "...",
+    "express": "...",
+    "mongoose": "..."
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}

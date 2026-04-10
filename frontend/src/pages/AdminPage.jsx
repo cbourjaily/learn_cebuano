@@ -4,13 +4,29 @@ export default function AdminPage() {
   const [english, setEnglish] = useState("");
   const [cebuano, setCebuano] = useState("");
 
-  const addEntry = () => {
-    console.log("NEW ENTRY:", { english, cebuano });
+  const addEntry = async () => {
+    if (!english || !cebuano) return alert("Fill both fields");
 
-    alert("Entry added (mock only)");
+const res = await fetch(`${import.meta.env.VITE_API_URL}/entries`, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        english,
+        cebuano,
+        audioUrl: "",
+        videoUrl: ""
+      }),
+    });
 
-    setEnglish("");
-    setCebuano("");
+    if (res.ok) {
+      alert("Entry added!");
+      setEnglish("");
+      setCebuano("");
+    } else {
+      alert("Failed to add entry");
+    }
   };
 
   return (
@@ -23,7 +39,7 @@ export default function AdminPage() {
         onChange={(e) => setEnglish(e.target.value)}
       />
 
-      <br />
+      <br /><br />
 
       <input
         placeholder="Cebuano"
@@ -31,11 +47,9 @@ export default function AdminPage() {
         onChange={(e) => setCebuano(e.target.value)}
       />
 
-      <br />
+      <br /><br />
 
-      <button onClick={addEntry}>
-        Add Entry
-      </button>
+      <button onClick={addEntry}>Add Entry</button>
     </div>
   );
 }

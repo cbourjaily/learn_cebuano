@@ -1,14 +1,24 @@
-import { useState } from "react";
-
-const entries = [
-  { id: 1, english: "Hello", cebuano: "Kumusta" },
-  { id: 2, english: "How are you?", cebuano: "Kumusta ka?" },
-  { id: 3, english: "Thank you", cebuano: "Salamat" },
-];
+import { useEffect, useState } from "react";
 
 export default function PublicPage() {
-  const [selectedEnglish, setSelectedEnglish] = useState(null);
-  const [selectedCebuano, setSelectedCebuano] = useState(null);
+  const [entries, setEntries] = useState([]);
+
+  const [openEnglish, setOpenEnglish] = useState(new Set());
+  const [openCebuano, setOpenCebuano] = useState(new Set());
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/entries`)
+      .then(res => res.json())
+      .then(data => setEntries(data));
+  }, []);
+
+  const toggle = (setState, id) => {
+    setState(prev => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
 
   return (
     <div style={{ padding: 20, fontFamily: "sans-serif" }}>
@@ -18,15 +28,13 @@ export default function PublicPage() {
         <h2>English → Cebuano</h2>
 
         {entries.map((e) => (
-          <div key={e.id}>
-            <button onClick={() => setSelectedEnglish(e)}>
+          <div key={e._id}>
+            <button onClick={() => toggle(setOpenEnglish, e._id)}>
               {e.english}
             </button>
 
-            {selectedEnglish?.id === e.id && (
-              <div>
-                {e.cebuano}
-              </div>
+            {openEnglish.has(e._id) && (
+              <div>{e.cebuano}</div>
             )}
           </div>
         ))}
@@ -37,15 +45,13 @@ export default function PublicPage() {
         <h2>Cebuano → English</h2>
 
         {entries.map((e) => (
-          <div key={e.id}>
-            <button onClick={() => setSelectedCebuano(e)}>
+          <div key={e._id}>
+            <button onClick={() => toggle(setOpenCebuano, e._id)}>
               {e.cebuano}
             </button>
 
-            {selectedCebuano?.id === e.id && (
-              <div>
-                {e.english}
-              </div>
+            {openCebuano.has(e._id) && (
+              <div>{e.english}</div>
             )}
           </div>
         ))}
