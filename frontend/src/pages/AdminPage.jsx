@@ -10,10 +10,7 @@ export default function AdminPage() {
 useEffect(() => {
   fetch(`${import.meta.env.VITE_API_URL}/entries`)
     .then(res => res.json())
-    .then(data => {
-      console.log("ENTRIES:", data);
-      setEntries(data);
-    })
+    .then(data => setEntries(data))
     .catch(err => console.error("FETCH ERROR:", err));
 }, []);
 
