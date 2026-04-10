@@ -69,6 +69,21 @@ app.post('/entries', async (req, res) => {
   }
 });
 
+// Update entry (ADMIN)
+app.put('/entries/:id', async (req, res) => {
+  try {
+    const { english, cebuano, audioUrl, videoUrl } = req.body;
+    const entry = await Entry.findByIdAndUpdate(
+      req.params.id,
+      { english, cebuano, audioUrl, videoUrl },
+      { new: true }
+    );
+    res.json(entry);
+  } catch (err) {
+    res.status(400).json({ error: "Failed to update entry" });
+  }
+});
+
 // Delete entry (optional admin tool later)
 app.delete('/entries/:id', async (req, res) => {
   await Entry.findByIdAndDelete(req.params.id);
